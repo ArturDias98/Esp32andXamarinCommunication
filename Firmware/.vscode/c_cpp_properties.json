@@ -8,8 +8,8 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "d:/Artur Dias/Documents/Projetos/Mobile/ESP32/Bluetooth_Iniciante/Firmware/BLEEsp32/include",
-                "d:/Artur Dias/Documents/Projetos/Mobile/ESP32/Bluetooth_Iniciante/Firmware/BLEEsp32/src",
+                "d:/Artur Dias/Documents/Projetos/Mobile/DataOverBluetooth/Firmware/include",
+                "d:/Artur Dias/Documents/Projetos/Mobile/DataOverBluetooth/Firmware/src",
                 "C:/Users/Artur Dias/.platformio/packages/framework-arduinoespressif32/libraries/BluetoothSerial/src",
                 "C:/Users/Artur Dias/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/config",
                 "C:/Users/Artur Dias/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/newlib/platform_include",
@@ -217,8 +217,8 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "d:/Artur Dias/Documents/Projetos/Mobile/ESP32/Bluetooth_Iniciante/Firmware/BLEEsp32/include",
-                    "d:/Artur Dias/Documents/Projetos/Mobile/ESP32/Bluetooth_Iniciante/Firmware/BLEEsp32/src",
+                    "d:/Artur Dias/Documents/Projetos/Mobile/DataOverBluetooth/Firmware/include",
+                    "d:/Artur Dias/Documents/Projetos/Mobile/DataOverBluetooth/Firmware/src",
                     "C:/Users/Artur Dias/.platformio/packages/framework-arduinoespressif32/libraries/BluetoothSerial/src",
                     "C:/Users/Artur Dias/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/config",
                     "C:/Users/Artur Dias/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/newlib/platform_include",
