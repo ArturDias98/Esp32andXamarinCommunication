@@ -40,16 +40,19 @@ void SendData_Bluetooth()
   uint8_t data1 = analogData & 0xFF;        // lsb
   uint8_t data2 = (analogData >> 8) & 0xFF; // msb
 
+  uint8_t data[6];
   if (millis() - btSendInterval >= BT_TIME_INTERVAL)
   {
-    serialBT.write(0xAB);  // Protocol header
-    serialBT.write(0xCD);  // Protocol header
-    serialBT.write(data1); // Data lsb
-    serialBT.write(data2); // Data msb
-    serialBT.write(0xAF);  // Protocol tail
-    serialBT.write(0xCF);  // Protocol tail
+    data[0] = 0xAB;
+    data[1] = 0xCD;
+    data[2] = data1;
+    data[3] = data2;
+    data[4] = 0xAF;
+    data[5] = 0xCF;
+    
+    serialBT.write(data, sizeof(data));
 
-    btSendInterval = millis();
+   btSendInterval = millis();
   }
 }
 
