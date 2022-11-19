@@ -2,8 +2,8 @@
 #include <BluetoothSerial.h>
 
 #define SERIAL_TIME_INTERVAL 1000 // miliseconds
-#define BT_TIME_INTERVAL 50       // miliseconds
-#define BT_NUM_PACKAGES 100
+#define BT_TIME_INTERVAL 100        // miliseconds
+#define BT_NUM_PACKAGES 200
 
 BluetoothSerial serialBT;
 uint8_t dataReceived;
@@ -12,19 +12,22 @@ unsigned long btSendInterval;
 const int analogPin = 34;
 int analogData = 0;
 uint32_t package = 0;
+bool btCongested = false;
 
 void SendData_Bluetooth();
 void SendData_Serial();
+void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param);
+
 void setup()
 {
   // put your setup code here, to run once:
   Serial.begin(9600);
   serialBT.begin("ESP32");
+  serialBT.register_callback(callback);
   Serial.println("Started");
   dataReceived = 0;
   serialSendInterval = millis();
   btSendInterval = millis();
-  ;
 }
 
 void loop()
@@ -39,14 +42,19 @@ void loop()
 
 void SendData_Bluetooth()
 {
-  if(!serialBT.hasClient()){
+  if (!serialBT.hasClient())
+  {
     Serial.println("Not connected");
+    serialBT.flush();
     delay(1000);
     return;
   }
-  // Sending 16 bits of data over bluetooth.
-  uint8_t data1 = analogData & 0xFF;        // lsb
-  uint8_t data2 = (analogData >> 8) & 0xFF; // msb
+
+  while (btCongested)
+  {
+    serialBT.flush();
+  }
+  
 
   if (millis() - btSendInterval >= BT_TIME_INTERVAL)
   {
@@ -54,20 +62,22 @@ void SendData_Bluetooth()
 
     data[0] = 0xAB;
     data[1] = 0xCD;
-    data[2] = data1;
-    data[3] = data2;
-    data[4] = 0xAF;
-    data[5] = 0xCF;
+    data[2] = analogData & 0xFF;;
+    data[3] = (analogData >> 8) & 0xFF;
+    data[4] = (analogData >> 16) & 0xFF;
+    data[5] = (analogData >> 24) & 0xFF;
+    data[6] = 0xAF;
+    data[7] = 0xCF;
 
     serialBT.write(data, sizeof(data));
-    package++;
+    //package++;
 
-    if (package >= BT_NUM_PACKAGES)
+    /*if (package >= BT_NUM_PACKAGES)
     {
       // Prevent congested.
       serialBT.flush();
       package = 0;
-    }
+    }*/
 
     btSendInterval = millis();
   }
@@ -81,5 +91,20 @@ void SendData_Serial()
   {
     serialSendInterval = millis();
     Serial.println(analogData);
+  }
+}
+void callback(esp_spp_cb_event_t event, esp_spp_cb_param_t *param)
+{
+  if (event == ESP_SPP_CONG_EVT)
+  {
+    if (param->cong.cong)
+    {
+      btCongested = true;
+      
+    }
+    else
+    {
+      btCongested = false;
+    }
   }
 }

@@ -7,6 +7,7 @@ namespace BluetoothApp
 {
     public partial class App : Application
     {
+        public Action<int> Aux { get; set; }
         public App()
         {
             InitializeComponent();

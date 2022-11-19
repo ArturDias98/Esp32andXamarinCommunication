@@ -25,7 +25,7 @@ namespace BluetoothApp.Views
             BindingContext = new SelectDeviceViewModel();
             UpdateUI();
 
-            _protocolDecode = new ProtocolDecode(0xAB, 0xCD, 0xAF, 0xCF, 2);
+            _protocolDecode = new ProtocolDecode(0xAB, 0xCD, 0xAF, 0xCF);
             _protocolDecode.OnDataFromatedEvent += OnDataFormatted;
         }
         private void UpdateUI()
@@ -98,10 +98,11 @@ namespace BluetoothApp.Views
             _protocolDecode.Add(data);
         }
 
-        private void OnDataFormatted(double data)
+        private void OnDataFormatted(IEnumerable<byte> data)
         {
             var model = BindingContext as SelectDeviceViewModel;
-            model.DataReceived = data;
+            var convert = BitConverter.ToInt32(data.ToArray(), 0);
+            model.DataReceived = convert;
         }
     }
 }
